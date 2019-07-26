@@ -1,0 +1,1412 @@
+/*! Copyright Pingdom AB 2019. All rights reserved. */
+.CodeMirror {
+  line-height: 1em;
+  font-family: monospace;
+
+  /* Necessary so the scrollbar can be absolutely positioned within the wrapper on Lion. */
+  position: relative;
+  /* This prevents unwanted scrollbars from showing up on the body and wrapper in IE. */
+  overflow: hidden;
+}
+
+.CodeMirror-scroll {
+  overflow: auto;
+  height: 300px;
+  /* This is needed to prevent an IE[67] bug where the scrolled content
+     is visible outside of the scrolling box. */
+  position: relative;
+  outline: none;
+}
+
+/* Vertical scrollbar */
+.CodeMirror-scrollbar {
+  position: absolute;
+  right: 0; top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  z-index: 5;
+}
+.CodeMirror-scrollbar-inner {
+  /* This needs to have a nonzero width in order for the scrollbar to appear
+     in Firefox and IE9. */
+  width: 1px;
+}
+.CodeMirror-scrollbar.cm-sb-overlap {
+  /* Ensure that the scrollbar appears in Lion, and that it overlaps the content
+     rather than sitting to the right of it. */
+  position: absolute;
+  z-index: 1;
+  float: none;
+  right: 0;
+  min-width: 12px;
+}
+.CodeMirror-scrollbar.cm-sb-nonoverlap {
+  min-width: 12px;
+}
+.CodeMirror-scrollbar.cm-sb-ie7 {
+  min-width: 18px;
+}
+
+.CodeMirror-gutter {
+  position: absolute; left: 0; top: 0;
+  background-color: #f7f7f7;
+  border-right: 1px solid #eee;
+  min-width: 2em;
+  height: 100%;
+}
+.CodeMirror-gutter-text {
+  color: #aaa;
+  text-align: right;
+  padding: .4em .2em .4em .4em;
+  white-space: pre !important;
+  cursor: default;
+}
+.CodeMirror-lines {
+  padding: .4em;
+  white-space: pre;
+  cursor: text;
+}
+
+.CodeMirror pre {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border-width: 0; margin: 0; padding: 0; background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0; margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  overflow: visible;
+}
+
+.CodeMirror-wrap pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+.CodeMirror-wrap .CodeMirror-scroll {
+  overflow-x: hidden;
+}
+
+.CodeMirror textarea {
+  outline: none !important;
+}
+
+.CodeMirror pre.CodeMirror-cursor {
+  z-index: 10;
+  position: absolute;
+  visibility: hidden;
+  border-left: 1px solid black;
+  border-right: none;
+  width: 0;
+}
+.cm-keymap-fat-cursor pre.CodeMirror-cursor {
+  width: auto;
+  border: 0;
+  background: transparent;
+  background: rgba(0, 200, 0, .4);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#6600c800, endColorstr=#4c00c800);
+}
+/* Kludge to turn off filter in ie9+, which also accepts rgba */
+.cm-keymap-fat-cursor pre.CodeMirror-cursor:not(#nonsense_id) {
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+.CodeMirror pre.CodeMirror-cursor.CodeMirror-overwrite {}
+.CodeMirror-focused pre.CodeMirror-cursor {
+  visibility: visible;
+}
+
+div.CodeMirror-selected { background: #d9d9d9; }
+.CodeMirror-focused div.CodeMirror-selected { background: #d7d4f0; }
+
+.CodeMirror-searching {
+  background: #ffa;
+  background: rgba(255, 255, 0, .4);
+}
+
+/* Default theme */
+
+.cm-s-default span.cm-keyword {color: #708;}
+.cm-s-default span.cm-atom {color: #219;}
+.cm-s-default span.cm-number {color: #164;}
+.cm-s-default span.cm-def {color: #00f;}
+.cm-s-default span.cm-variable {color: black;}
+.cm-s-default span.cm-variable-2 {color: #05a;}
+.cm-s-default span.cm-variable-3 {color: #085;}
+.cm-s-default span.cm-property {color: black;}
+.cm-s-default span.cm-operator {color: black;}
+.cm-s-default span.cm-comment {color: #a50;}
+.cm-s-default span.cm-string {color: #a11;}
+.cm-s-default span.cm-string-2 {color: #f50;}
+.cm-s-default span.cm-meta {color: #555;}
+.cm-s-default span.cm-error {color: #f00;}
+.cm-s-default span.cm-qualifier {color: #555;}
+.cm-s-default span.cm-builtin {color: #30a;}
+.cm-s-default span.cm-bracket {color: #997;}
+.cm-s-default span.cm-tag {color: #170;}
+.cm-s-default span.cm-attribute {color: #00c;}
+.cm-s-default span.cm-header {color: blue;}
+.cm-s-default span.cm-quote {color: #090;}
+.cm-s-default span.cm-hr {color: #999;}
+.cm-s-default span.cm-link {color: #00c;}
+
+span.cm-header, span.cm-strong {font-weight: bold;}
+span.cm-em {font-style: italic;}
+span.cm-emstrong {font-style: italic; font-weight: bold;}
+span.cm-link {text-decoration: underline;}
+
+span.cm-invalidchar {color: #f00;}
+
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
+
+@media print {
+
+  /* Hide the cursor when printing */
+  .CodeMirror pre.CodeMirror-cursor {
+    visibility: hidden;
+  }
+
+}
+
+/* obfuscating
+.CodeMirror .CodeMirror-inactive-line, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line {
+  display: flex;
+}
+
+.CodeMirror .CodeMirror-inactive-line .cm-block, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-block {
+  margin: 0 6px 0 0;
+}
+
+.CodeMirror .CodeMirror-inactive-line .cm-url, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-url,
+.CodeMirror .CodeMirror-inactive-line .cm-username, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-username,
+.CodeMirror .CodeMirror-inactive-line .cm-value, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-value,
+.CodeMirror .CodeMirror-inactive-line .cm-password, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-password {
+  width: 30px;
+  overflow: hidden;
+}
+
+.CodeMirror .CodeMirror-inactive-line .cm-url:before, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-url:before,
+.CodeMirror .CodeMirror-inactive-line .cm-username:before, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-username:before,
+.CodeMirror .CodeMirror-inactive-line .cm-value:before, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-value:before,
+.CodeMirror .CodeMirror-inactive-line .cm-password:before, .CodeMirror > :not(.CodeMirror-focused) .CodeMirror-active-line .cm-password:before {
+  content: '****';
+}
+
+.CodeMirror .CodeMirror-line.navigated span:last-child:after {
+  display: none;
+}
+
+.CodeMirror .CodeMirror-line.navigated span:last-child {
+  padding-right: 0px !important;
+}*/
+
+.CodeMirror-completions {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+}
+.CodeMirror-completions select {
+  background: #fafafa;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: monospace;
+}
+
+/* ************************* *
+ * TMS Specific CSS Code     *
+ * ************************* *
+ */
+
+#newRecipe h3 span.note {
+    float: right;
+    color: #ffffff;
+    font-size: 11px;
+    background-color: #3098ff;
+    padding: 5px 20px;
+    margin-right: -24px;
+}
+
+#newRecipe div.inline {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+#newRecipe div.inline p label {
+    font-weight: bold;
+}
+
+a#tms_demo {
+    color: #787878;
+    float: right;
+    margin-top: -20px;
+    padding: 5px 10px;
+    background-color: #d8d8d8;
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.errorbubble {
+    color: #fff;
+    font-size: 9px;
+    font-style: normal;
+    padding: 3px 5px;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+}
+
+.errorbubble.down {
+    background: #f49b50;
+    background: -moz-linear-gradient(top, #f49b50 0%, #ee541e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f49b50), color-stop(100%, #ee541e));
+    background: -webkit-linear-gradient(top, #f49b50 0%, #ee541e 100%);
+    background: -o-linear-gradient(top, #f49b50 0%, #ee541e 100%);
+    background: -ms-linear-gradient(top, #f49b50 0%, #ee541e 100%);
+    background: linear-gradient(to bottom, #f49b50 0%, #ee541e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#f49b50', endColorstr = '#ee541e', GradientType = 0);
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+a.errorbubble:link {
+    text-decoration: none;
+}
+
+.margincheat {
+    margin-top: 30px;
+}
+
+/* @group Report */
+
+#reportCoupon.report {
+    font-size: 0;
+    width: 29px;
+    height: 29px;
+    display: none;
+}
+
+tr a.report, form a.report, #reportCoupon.report {
+    background: url(../images/application.png?b1563543923) -145px -1284px;
+}
+
+tr a.report.pressed, tr.hover a.report.pressed {
+    background: url(../images/application.png?b1563543923) -145px -1371px;
+}
+
+tr:hover a.report.pressed {
+    background-position: -145px -1371px;
+}
+
+tr:hover a.report, tr:hover a:active.report.disabled {
+    background-position: -145px -1313px;
+}
+
+tr:hover a:active.report, tr.hover a.report {
+    background-position: -145px -1342px;
+}
+
+/* @end */
+
+#reportLog .columnOne {
+    width: 80px;
+    margin-right: 20px;
+    float: left;
+}
+
+#reportLog .columnTwo {
+    width: 250px;
+    margin-right: 50px;
+    float: left;
+}
+
+#reportLog .columnThree {
+    width: 80px;
+    margin-right: 30px;
+    float: left;
+}
+
+#reportLog .columnFour {
+    width: 110px;
+    float: left;
+}
+
+#recipeTableTabs {
+    margin-top: 20px;
+}
+
+#recipeTable a.start {
+    display: block;
+}
+
+#recipeTable a.start:hover {
+    display: block;
+}
+
+#dayPick {
+    width: 200px;
+    margin-left: 205px;
+    margin-top: 2px;
+    position: absolute;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: center;
+}
+
+.dayback {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    float: left;
+    margin-left: 140px;
+    background: url(../images/application.png?b1563543923) -235px -1344px;
+    margin-right: 10px;
+}
+
+.dayforward {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    margin-right: 110px;
+    background: url(../images/application.png?b1563543923) -235px -1316px;
+    float: right;
+}
+
+.dayforward.disabled, .dayback.disabled {
+    cursor: default;
+    opacity: .6;
+}
+
+#errorDetailsPrompt {
+    width: 90%;
+    position: relative;
+    margin: 10px 0 10px 0;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.warningTriangle {
+    width: 17px;
+    height: 16px;
+    background: url(../images/application.png?b1563543923) -260px -580px;
+    float: left;
+    margin: 15px 20px 0 15px;
+}
+
+.errorDetailsWrap {
+    clear: both;
+}
+
+.errorDetailsCol1 {
+    margin-bottom: 2px;
+    width: 20px;
+    margin-right: 0px;
+    padding: 5px;
+    float: left;
+    text-align: right;
+    background-color: #eee;
+    -webkit-border-radius: 5px 0px 0px 5px;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.errorDetailsCol2 {
+    width: 430px;
+    margin-bottom: 2px;
+    padding: 5px 15px 5px 15px;
+    float: left;
+    background-color: #eee;
+    margin-right: 0px;
+}
+
+.errorDetailsCol3 {
+    width: 88px;
+    float: left;
+    font-size: 11px;
+}
+
+#errorDetailsWrapper, #recipeIngredientsWrapper {
+    clear: both;
+    margin: 0 auto;
+}
+
+#errorDetailsHeader, #recipeIngredientsHeader {
+    font-size: 14px;
+    color: #666;
+    padding-bottom: 12px;
+    line-height: 30px;
+}
+
+#errorDetailsHeader {
+    width: 100%;
+    margin-top: 30px;
+}
+
+#errorDetailsContent {
+    min-height: 30px;
+    width: 100%;
+    border: 1px solid #adacac;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    margin-top: -3px;
+    background-color: #F4D9D9;
+    overflow: hidden;
+}
+
+#recipeErrorTable td.error_message {
+    color: #e85027;
+    text-overflow: ellipsis;
+}
+
+#tms_no_results {
+    background-image: url(../images/betalabs/tms_no_data.png?b1563543923);
+    height: 685px;
+    position: relative;
+    top: 30px;
+    clear: left;
+    display: none;
+    width: 665px;
+    left: -4px;
+}
+
+#recipeIngredientsContent {
+    width: 618px;
+    background-color: white;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: -3px;
+    min-height: 28px;
+    overflow: hidden;
+}
+
+#recipeIngredientsControl {
+    overflow: hidden;
+}
+
+#recipeIngredientsControl div.control {
+    float: right;
+    margin-top: 10px;
+}
+
+#recipeIngredientsControl p.note {
+    float: right;
+    margin-top: 20px;
+    color: #999999;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#errorDetailsContent .errorDetails-row {
+    height: 30px;
+    line-height: 30px;
+    border: none;
+}
+
+#errorDetailsContent .errorDetails-row.first .errorDetails-col1,
+#errorDetailsContent .errorDetails-row.first .errorDetails-col2,
+#errorDetailsContent .errorDetails-row.first .errorDetails-col3,
+#errorDetailsContent .errorContent {
+    background-image: url(/images/foundation.png?b1563543923);
+    background-repeat: repeat-x;
+    background-position: 0 -896px;
+}
+
+#errorDetailsContent .errorDetails-row .errorDetails-col1 {
+    height: 30px;
+    text-align: center;
+    color: #cbcbcb;
+    white-space: nowrap;
+}
+
+#errorDetailsContent .errorDetails-row {
+    background-color: #f2f2f2;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#errorDetailsContent .errorDetails-row .errorDetails-col2 {
+    background-color: #fff;
+    padding-left: 10px;
+    width: 80%;
+    white-space: normal;
+    word-break: break-all;
+}
+
+#errorDetailsContent .errorDetails-row .errorDetails-col3 {
+    float: right;
+    padding: 5px 10px 0 0;
+    white-space: nowrap;
+}
+
+#errorDetailsContent {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#errorDetailsContent .tmsBtnSmallGreen,
+#errorDetailsContent .tmsBtnSmallOrange {
+    height: 18px;
+    width: 65px;
+    line-height: 18px;
+    font-size: 12px;
+    text-align: center;
+    background: none;
+    border: none;
+    background-color: black;
+    color: white;
+    text-shadow: none;
+    -ms-filter: none;
+    filter: none;
+    float: right;
+}
+
+#errorDetailsContent .tmsBtnSmallGreen {
+    background-color: #57C700;
+}
+
+#errorDetailsContent .tmsBtnSmallOrange {
+    background-color: #FF4C4C;
+}
+
+.tmsBtnSmallGreen {
+    border: 1px solid #ccc;
+    border-color: #7de241 #67c52f #3f8f0f #67c52f;
+    background: #9bf46c;
+    background: -moz-linear-gradient(top, #9bf46c 0%, #58c214 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #9bf46c), color-stop(100%, #58c214));
+    background: -webkit-linear-gradient(top, #9bf46c 0%, #58c214 100%);
+    background: -o-linear-gradient(top, #9bf46c 0%, #58c214 100%);
+    background: -ms-linear-gradient(top, #9bf46c 0%, #58c214 100%);
+    background: linear-gradient(to bottom, #9bf46c 0%, #58c214 100%);
+    color: #447e22;
+    text-shadow: #ade592 0 1px 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#9bf46c', endColorstr='#58c214', GradientType=0)";
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#9bf46c', endColorstr = '#58c214', GradientType = 0);
+}
+
+.tmsBtnSmallOrange {
+    border: 1px solid #ccc;
+    border-color: #f17a3a #d1531c #ba3705 #d1531c;
+    background: #f4994f;
+    background: -moz-linear-gradient(top, #f4994f 0%, #ee561f 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4994f), color-stop(100%, #ee561f));
+    background: -webkit-linear-gradient(top, #f4994f 0%, #ee561f 100%);
+    background: -o-linear-gradient(top, #f4994f 0%, #ee561f 100%);
+    background: -ms-linear-gradient(top, #f4994f 0%, #ee561f 100%);
+    background: linear-gradient(to bottom, #f4994f 0%, #ee561f 100%);
+    color: #9f4615;
+    text-shadow: #f89a70 0 1px 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f4994f', endColorstr='#ee561f', GradientType=0)";
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#f4994f', endColorstr = '#ee561f', GradientType = 0);
+}
+
+.tmsBtnSmallGreen, .tmsBtnSmallOrange {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#errorDetailsContent .errorDetails-row.error {
+    background-color: #F4D9D9;
+    overflow: visible;
+}
+
+#errorDetailsContent .errorDetails-row.error .errorDetails-col1 {
+    color: #000;
+}
+
+#errorDetailsContent .errorDetails-row.error .errorDetails-col2 {
+    background-color: #FFE4E4;
+}
+
+#errorDetailsContent .errorContent {
+    width: 458px;
+    min-height: 100px;
+    background-color: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #adacac;
+    overflow: auto;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    color: #666;
+    font-size: 12px;
+    line-height: 14px;
+    height: 150px;
+    overflow: scroll;
+
+}
+
+#errorDetailsContent .errorContent pre,
+#errorDetailsContent .errorContent pre.prettyprint,
+#errorDetailsContent .errorContent pre.prettyprint ol.linenums {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+#errorDetailsContent .errorContent pre.prettyprint ol.linenums li {
+    display: block;
+    width: 35000px;
+}
+
+#smallAction {
+    float: right;
+    height: 40px;
+    margin-top: -30px;
+}
+
+.greenCheckbox {
+    width: 18px;
+    height: 18px;
+    background: url(../images/application.png?b1563543923) -260px -599px;
+    float: left;
+    margin: 0 5px 0 10px;
+}
+
+.triangle-isosceles {
+    position: relative;
+    padding: 5px 0 0 0;
+    margin: 1em 0 0;
+    color: #fff;
+    width: 330px;
+    background-color: #000;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 5px;
+    min-width: 50px; /*suggest a mid-width & min-height*/
+    min-height: 20px;
+}
+
+.triangle-isosceles.top {
+    background-color: #000;
+}
+
+.triangle-isosceles:after {
+    content: "";
+    position: absolute;
+    bottom: -15px; /* value = - border-top-width - border-bottom-width */
+    left: 50px; /* controls horizontal position */
+    border-width: 15px 15px 0; /* vary these values to change the angle of the vertex */
+    border-style: solid;
+    border-color: #000 transparent;
+    /* reduce the damage in FF3.0 */
+    display: block;
+    width: 0;
+}
+
+.triangle-isosceles.top:after {
+    top: -10px; /* value = - border-top-width - border-bottom-width */
+    right: 167px; /* controls horizontal position */
+    bottom: auto;
+    left: auto;
+    border-width: 0 15px 15px; /* vary these values to change the angle of the vertex */
+    border-color: #000 transparent;
+}
+
+.triangle-isosceles.right:after {
+    right: -6px;
+    top: auto;
+    bottom: 5px;
+    left: auto;
+    border-width: 6px 0 6px 6px;
+    border-color: transparent #000;
+}
+
+/* @group TMS base */
+
+.tmsToolTip {
+    font-size: 90%;
+    padding: 10px 15px;
+    text-align: center;
+    height: 5.5em;
+    width: 140px;
+    z-index: 50;
+    /* box-shadow */
+    -o-box-shadow: 0 5px 10px #666;
+    -ms-box-shadow: 0 5px 10px #666;
+    -moz-box-shadow: 0 5px 10px #666;
+    -webkit-box-shadow: 0 5px 10px #666;
+    box-shadow: 0 5px 10px #666;
+    z-index: 4050;
+}
+
+.tmsToolTip.top:after {
+    right: 70px;
+}
+
+/* @end */
+
+/* @group TMSEditor */
+
+#tms-editor {
+    position: relative;
+}
+
+input.tmsWorking {
+    background: url(/images/loader_small.gif?b1563543923) no-repeat 20px center #999;
+    padding-left: 42px;
+    padding-right: 24px;
+}
+
+.tmsBubbleContainer {
+    position: absolute;
+}
+
+.tmsEditorBubble {
+    height: auto;
+    left: -278px;
+    min-height: 4em;
+    position: absolute;
+    text-align: left;
+    bottom: -11px;
+    width: 240px;
+    z-index: 2000;
+}
+
+.tmsErrorToolTip {
+    height: auto;
+    width: 300px;
+}
+
+.tmsErrorToolTip.top:after {
+    right: 150px;
+}
+
+.CodeMirror-placeholder {
+    background: url(/images/spinner-light.gif?b1563543923) no-repeat center center;
+    height: 30px;
+    width: 562px;
+}
+
+.CodeMirror {
+    font-family: inherit !important; /* needed for line numbers to use font defined in body */
+    opacity: 0; /* overridden in style attribute */
+    padding: 0;
+    width: 618px;
+    outline: none;
+    font-size: 13px;
+}
+
+.CodeMirror-gutter {
+    border: none;
+    padding: 0;
+    min-width: 0 !important;
+    width: 26px;
+}
+
+.CodeMirror-gutter-text {
+    padding: 0;
+}
+
+/* elements containing line numbers */
+.CodeMirror-gutter pre {
+    background-color: #f2f2f2;
+    color: #999;
+    font-family: inherit; /* use body's font */
+    height: 28px; /* value = line-height */
+    line-height: 28px; /* value = .CodeMirror-scroll { line-height } */
+    text-align: center;
+    width: 26px;
+}
+
+/* FIXME: first-child not supported in IE8, and possibly others */
+.CodeMirror-gutter pre:first-child {
+    background-repeat: repeat-x;
+    background-position: 0 -896px;
+}
+
+/* FIXME: nth-child not supported in IE8, and possibly others */
+.CodeMirror-gutter pre:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+.CodeMirror-scroll {
+    height: auto; /* needed for editor to expand vertically as content is added */
+    font-family: monospace;
+    font-size: 95%; /* based on body's font-size */
+    line-height: 28px; /* value = .CodeMirror-gutter pre { line-height } */
+    margin-left: 26px; /* value = .CodeMirror-gutter { width } */
+    margin-right: 91px;
+    min-height: 26px;
+    padding: 0 0 0 8px; /* indents text in the editor a slight bit */
+    overflow-y: hidden; /* needed for editor to expand vertically as content is added */
+    overflow-x: auto; /* needed for editor to expand vertically as content is added */
+}
+
+.CodeMirror-scroll > div {
+    display: inline-block;
+    min-width: 100%;
+}
+
+.CodeMirror-lines {
+    padding: 0px; /* gets rid of the padding inside the editor; it is applied to each line instead */
+}
+
+.CodeMirror-lines > div {
+    margin-left: 0px !important; /* as we have moved the gutter outside of the editor, remove the space reserved for it */
+}
+
+.CodeMirror-line.navigated span:last-child {
+    padding-right: 20px;
+    position: relative;
+}
+
+.CodeMirror-line.navigated span:last-child:after {
+    background: url(/images/application.png?b1563543923) no-repeat -59px -552px;
+    content: '\00a0\00a0\00a0';
+    display: block;
+    height: 12px;
+    position: absolute;
+    right: 4px;
+    top: 0;
+    width: 12px;
+}
+
+pre.CodeMirror-line-bg {
+    margin-left: -8px; /* gets rid of the spacing before the background color horizontally */
+    padding-left: 8px; /* gets rid of the spacing before the background color horizontally */
+}
+
+.CodeMirror-line-bg.even {
+    background-color: #f2f2f2;
+}
+
+/* Colors for each distinct block type - in the editor only. */
+.CodeMirror .cm-action {
+    color: #229cfa;
+}
+
+.CodeMirror .cm-checkbox {
+    color: #c93597;
+}
+
+.CodeMirror .cm-clickable {
+    color: #c93597;
+}
+
+.CodeMirror .cm-element {
+    color: #c93597;
+}
+
+.CodeMirror .cm-fillable {
+    color: #c93597;
+}
+
+.CodeMirror .cm-form {
+    color: #c93597;
+}
+
+.CodeMirror .cm-option {
+    color: #c93597;
+}
+
+.CodeMirror .cm-password {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-radio {
+    color: #c93597;
+}
+
+.CodeMirror .cm-select {
+    color: #c93597;
+}
+
+.CodeMirror .cm-seconds {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-status {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-time {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-url {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-username {
+    color: #fb633a;
+}
+
+.CodeMirror .cm-validation {
+    color: #5c9d38;
+}
+
+.CodeMirror .cm-value {
+    color: #fb633a;
+}
+
+/* Auto-completion popup list. */
+.pd-tms-autocomplete-wrapper {
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: default;
+    font-family: monospace;
+    padding: 0;
+    position: absolute;
+    min-width: 20em;
+    max-width: 90%;
+    white-space: nowrap;
+    z-index: 4050;
+    /* drop shadow */
+    -o-box-shadow: 0 4px 32px #888;
+    -moz-box-shadow: 0 4px 32px #888;
+    -khtml-box-shadow: 0 4px 32px #888;
+    -webkit-box-shadow: 0 4px 32px #888;
+    box-shadow: 0 4px 32px #888;
+    /* prevent the user from selecting text in the popup */
+    -o-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.pd-tms-autocomplete-help {
+    border-top: 1px solid #999999;
+    color: #999999;
+}
+
+.CodeMirror-completions {
+    /* scroll if too high */
+    max-height: 20em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+
+.CodeMirror-completions ul {
+    border-radius: 4px;
+    font-size: .9em;
+    list-style: none;
+    padding-top: 1.7em;
+    position: relative;
+}
+
+.CodeMirror-completions ul[data-count='0'] {
+    display: none;
+}
+
+.CodeMirror-completions ul:before {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    content: attr(data-title);
+    display: block;
+    font-weight: bold;
+    left: 0;
+    padding: 0 .8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.CodeMirror-completions ul:first-child:before {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.CodeMirror-completions ul[data-type='action']:before {
+    background-color: #7dcbfc;
+    color: #fff;
+}
+
+.CodeMirror-completions ul[data-type='action'] {
+    background-color: #f2faff;
+}
+
+.CodeMirror-completions ul[data-type='validation'] {
+    background-color: #eef5eb;
+}
+
+.CodeMirror-completions ul[data-type='validation']:before {
+    background-color: #a5c992;
+    color: #fff;
+}
+
+.pd-tms-autocomplete-wrapper li {
+    float: none;
+    padding: 0 2.8em 0 .8em;
+}
+
+.CodeMirror-completions .selected {
+    background-color: #d6dcd3;
+}
+
+/* This *only* affects command listings, not elements. Elements get the cm-data
+   class instead of cm-block. */
+.CodeMirror-completions .cm-block:after {
+    content: " ";
+}
+
+.CodeMirror-completions .cm-block:before {
+    content: " ";
+}
+
+/* Colors for each distinct block type - in the code-completion list. */
+.CodeMirror-completions .cm-action {
+    color: #229cfa;
+}
+
+.CodeMirror-completions .cm-checkbox {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-clickable {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-description {
+    color: #999;
+}
+
+.CodeMirror-completions .cm-element {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-fillable {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-form {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-option {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-password {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-radio {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-select {
+    color: #c93597;
+}
+
+.CodeMirror-completions .cm-seconds {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-status {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-time {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-url {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-username {
+    color: #fb633a;
+}
+
+.CodeMirror-completions .cm-validation {
+    color: #5c9d38;
+}
+
+.CodeMirror-completions .cm-value {
+    color: #fb633a;
+}
+
+/* Test status list */
+.pingdom-tms-status {
+    margin: 0;
+    padding: 0;
+}
+
+.pingdom-tms-status li {
+    background-color: #f2f2f2;
+    color: #666;
+    font-size: 80%;
+    height: 24px; /* value = line-height */
+    line-height: 28px; /* value = .CodeMirror-scroll { line-height } */
+    padding-left: 6px;
+    padding-right: 4px;
+    padding-top: 4px;
+    text-align: right;
+    width: 81px;
+}
+
+.pingdom-tms-status li.even {
+    background-color: #e6e6e6;
+}
+
+.pingdom-tms-status li.working:before {
+    background-image: url(/images/loader.gif?b1563543923);
+    content: '\00a0';
+    height: 16px;
+    left: 37px; /* value = (.pingdom-tms-status li { width } / 2) - (width / 2) */
+    position: absolute;
+    top: 6px;
+    width: 16px;
+}
+
+/* FIXME: first-child not supported in IE8, and possibly others */
+.pingdom-tms-status li:first-child {
+    background-repeat: repeat-x;
+    background-position: 0 -896px;
+}
+
+.pingdom-tms-status li .close {
+    background: url(/images/application.png?b1563543923) -72px -528px;
+    cursor: pointer;
+    float: right;
+    opacity: .5;
+    margin-top: 2px;
+    height: 14px;
+    width: 14px;
+}
+
+.pingdom-tms-status li .close:hover {
+    background-position: -72px -542px;
+}
+
+.pingdom-tms-status .tmsBtnSmallGreen,
+.pingdom-tms-status .tmsBtnSmallOrange {
+    float: left;
+    height: 8px;
+    line-height: 9px;
+    padding: 4px 6px;
+    text-align: center;
+    width: 48px;
+}
+
+#tmsErrorResultContent {
+    background-color: #fff;
+    overflow: scroll;
+    margin: 20px 0 10px;
+    height: 200px;
+    border: 1px solid #DBDDDD;
+    padding: 0;
+}
+
+#tmsErrorResultContent pre.prettyprint {
+    border: none;
+    padding: 0;
+}
+
+/* @end */
+
+/* @group TMS Charts */
+
+.tmsReportToolTip {
+    width: 281px;
+    padding: 10px 0;
+    height: 40px;
+    left: 10px;
+}
+
+.tmsReportToolTip.top:after {
+    right: 125px;
+}
+
+.tmsOutageBubble .tmsToolTipData {
+    display: none;
+}
+
+.tmsOutageToolTip {
+    font-size: 90%;
+    padding: 10px 15px;
+    opacity: .75;
+    text-align: center;
+    height: 5.5em;
+    width: 140px;
+    z-index: 50;
+    /* box-shadow */
+    box-shadow: 0px 5px 10px #666;
+    -o-box-shadow: 0px 5px 10px #666;
+    -ms-box-shadow: 0px 5px 10px #666;
+    -moz-box-shadow: 0px 5px 10px #666;
+    -webkit-box-shadow: 0px 5px 10px #666;
+}
+
+.tmsOutageToolTip.bubble {
+    height: 50px;
+}
+
+.tmsOutageToolTip.top:after {
+    right: 70px;
+}
+
+.tmsOutageToolTip .errorCount {
+    display: block;
+    font-size: 300%;
+    font-weight: bold;
+    margin-top: .2em;
+}
+
+.tmsToolTip span {
+    display: block;
+}
+
+.tmsToolTipShortDesc, .tmsToolTipErrorMsg {
+    padding: 0;
+    margin: 0;
+}
+
+.tmsToolTipShortDesc {
+    font-size: .85em;
+}
+
+.tmsToolTipErrorMsg {
+    font-size: .95em;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tmsToolTipPrevious, .tmsToolTipNext {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    float: left;
+    margin: 10px;
+}
+
+.tmsToolTipPrevious {
+    background: url(../images/application.png?b1563543923) -235px -1344px;
+}
+
+.tmsToolTipNext {
+    background: url(../images/application.png?b1563543923) -235px -1316px;
+}
+
+.tmsToolTipPrevious.disabled, .tmsToolTipNext.disabled {
+    cursor: auto;
+    opacity: .4;
+}
+
+.tmsToolTipContent {
+    float: left;
+    width: 193px;
+}
+
+.tmsToolTipContent a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.tmsToolTipContent a:hover {
+    text-decoration: underline;
+}
+
+div#responsetimeChart {
+    border-top: 1px solid #DBDDDD;
+    border-right: 1px solid #DBDDDD;
+    border-left: 1px solid #DBDDDD;
+    height: 250px;
+    width: 618px;
+    background-color: #fff;
+}
+
+div#recipeContentDivider {
+    margin-bottom: 25px;
+}
+
+div#toggle_chart {
+    border-top: 1px solid #dbdddd;
+    border-right: 1px solid #dbdddd;
+    border-left: 1px solid #dbdddd;
+    border-bottom: none;
+}
+
+div#toggle_chart ul.buttongroup {
+    float: right;
+    margin-right: 10px;
+}
+
+#toggle_chart ul li.down {
+
+    background: linear-gradient(top, #ccc, #fff);
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccc), to(#fff));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #ccc, #fff);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #ccc, #fff);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #ccc, #fff);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #ccc, #fff);
+}
+
+#toggle_chart ul li a span.icontext {
+    float: none;
+    margin: 0;
+}
+
+a#toggle_chart {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+a#toggle_chart.button .label {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.CodeMirror pre.failure:first-of-type {
+    background-color: #fff6f6;
+}
+
+.pingdom-tms-status li.failure {
+    background-color: #ffe7e7;
+}
+
+.tms-tutorial-information-message {
+    display: block;
+    float: left;
+    padding-top: 12px;
+    color: #666666;
+}
+
+.tms-run-test-button {
+    float: right;
+}
+
+.label-custom-message {
+    font-size: 14px;
+    color: #666;
+    padding-bottom: 12px;
+    line-height: 30px;
+}
+
+/* @end */

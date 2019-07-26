@@ -1,0 +1,11 @@
+pendo.guides=[];
+pendo.normalizedUrl="http://my.pingdom.com/newchecks/checks";
+pendo.lastGuideStepSeen={"isMultiStep":false,"state":""};
+pendo.guideWidget={"enabled":false,"hidePoweredBy":true,"data":{"guideCssUrl":"https://pendo-static-5722396334227456.storage.googleapis.com/guide.1534421089895.css","onboarding":false}};
+pendo.guideCssUrl="https://pendo-static-5722396334227456.storage.googleapis.com/guide.1534421089895.css";
+pendo.throttling={"count":1,"enabled":true,"interval":12,"unit":"Hour"};
+pendo.autoOrdering=["gqW9MwKboVnmx94FAcAdU_fm36k","zg1AQ9ar3g7XlfQX4g4qCYK2-aI","xuAUs6NEkliD3Nz-qtJmaZMf9h4","NjU6Xtu8_d6huRWzFCjcoOxnNR0","N_UjPHOi46HHe6Lt3gNkcL9VliU","SP-OJxCfr3g6Rg1cRxylomF8hKo","TOiwCzRflO-jJVRFozaFJwVdQ5c","O9riT6kn3Du4DCcJ3KXhQJNOhoc","ywnuD2TVlUbq5WWuTsdefvAvkpM","NVIalZxm2LVnBuF2ZeRXgAtM4lw","9aR-htKkJ8PzuUPBfJPKvbSa9bk","HNYI6bqR55_nA_ocKLWElYNPKAA","8CLhh1PLoMdufPe7K2Qs7Sy-LrM","X6MRXJ2UQk78JtYaqn-utFRvJR8","0wcE0R4Wt3Ayh03C61xuHMUgays","Srw9Klwggxlp2X-Z-SWhsV4yejI","QPzdD12-exyGN5on7aSydGLBUzs","oR00jeOykwJ82F4ggNx5MlNz--Q","dP2rkSzxnf3EZ55ahhL4b4xIhvo","9JgaPRrj6SSY5TU7k11sFURl3yE","ACTzpksmt41zgcvYFYAy79MbCtY","r_g1olhHppAQkO5gAw4lAIQSuT0","CVUfv-2osYKy2h-p0ci67oyu6kY","ZpWubQSPUJMsqf-GmM-_AUFSzp8","EjOA9lVkIz217eZCFf5EQsnDQu0","Y7lCPdD3iBlyY8tqF_SCegGC_vI","zpzJgL96uYe8PrIqsTvGGg5qVBg","3yjIccbfTR0ztQO2tkfWrmxwLIk","9ozZhehOurHSl8jiyJePRTYehS0","RJ_gnSk-o-Hp_2lejVBUlZGnzuE","L8wNdAtUHjH1yA_Hbq6tV9DStjM"];
+pendo.globalJsUrl="";
+pendo.segmentFlags=[];
+pendo.designerEnabled=false;
+pendo.preventCodeInjection=false;
